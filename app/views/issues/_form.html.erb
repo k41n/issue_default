@@ -1,6 +1,5 @@
 <% @issue.subject = SecureRandom.uuid if @issue.subject.blank? %>
 <%= labelled_fields_for :issue, @issue do |f| %>
-<div style='display:none'>
 <%= call_hook(:view_issues_form_details_top, { :issue => @issue, :form => f }) %>
 
 <% if @issue.safe_attribute? 'is_private' %>
@@ -15,13 +14,14 @@
 <% end %>
 
 <% if @issue.safe_attribute? 'tracker_id' %>
-<p><%= f.select :tracker_id, @issue.project.trackers.collect {|t| [t.name, t.id]}, {:required => true},
+<p><%= f.select :tracker_id, available_trackers(User.current, @issue.project).collect {|t| [t.name, t.id]}, {:required => true},
                 :onchange => "updateIssueFrom('#{escape_javascript project_issue_form_path(@project, :id => @issue, :format => 'js')}')" %></p>
 <% end %>
-
+<div style='display:none'>
 <% if @issue.safe_attribute? 'subject' %>
 <p><%= f.text_field :subject, :size => 80, :maxlength => 255, :required => true %></p>
 <% end %>
+</div>
 
 <% if @issue.safe_attribute? 'description' %>
 <p>
@@ -38,7 +38,6 @@
 </p>
 <%= wikitoolbar_for 'issue_description' %>
 <% end %>
-</div>
 <div id="attributes" class="attributes">
   <%= render :partial => 'issues/attributes' %>
 </div>

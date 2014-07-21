@@ -1,5 +1,4 @@
 <%= labelled_fields_for :issue, @issue do |f| %>
-<div style='display:none'>
 
 <div class="splitcontent">
 <div class="splitcontentleft">
@@ -10,10 +9,11 @@
 <% else %>
 <p><label><%= l(:field_status) %></label> <%= h(@issue.status.name) %></p>
 <% end %>
-
+<div style='display:none'>
 <% if @issue.safe_attribute? 'priority_id' %>
 <p><%= f.select :priority_id, (@priorities.collect {|p| [p.name, p.id]}), {:required => true}, :disabled => !@issue.leaf? %></p>
 <% end %>
+</div>
 
 <% if @issue.safe_attribute? 'assigned_to_id' %>
 <p><%= f.select :assigned_to_id, principals_options_for_select(@issue.assignable_users, @issue.assigned_to), :include_blank => true, :required => @issue.required_attribute?('assigned_to_id') %></p>
@@ -70,7 +70,6 @@
 <% if @issue.safe_attribute?('done_ratio') && @issue.leaf? && Issue.use_field_for_done_ratio? %>
 <p><%= f.select :done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), :required => @issue.required_attribute?('done_ratio') %></p>
 <% end %>
-</div>
 </div>
 </div>
 <% if @issue.safe_attribute? 'custom_field_values' %>

@@ -1,8 +1,10 @@
 Redmine::Plugin.register :issue_defaults do
   name 'Issue Defaults plugin'
-  author 'Author name'
-  description 'This is a plugin for Redmine'
-  version '0.0.1'
-  url 'http://example.com/path/to/plugin'
-  author_url 'http://example.com/about'
+  author 'LLC Kodep'
+  description 'Customization in accordance to Stas Malyshev requirements'
+  version '0.0.2'
+  url 'https://github.com/k41n/issue_default'
+  author_url 'Andrei.Malyshev@kodep.ru'
 end
+
+require 'redmine_issue_defaults'
