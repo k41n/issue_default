@@ -20,8 +20,8 @@ module RedmineIssueDefaults
           project.trackers
         end
 
-        def executor_editing(issue, user)
-          is_executor?(user) && !issue.new_record?
+        def executor_editing?(issue)
+          is_executor?(User.current) && !issue.new_record?
         end
 
         def is_executor?(user)
