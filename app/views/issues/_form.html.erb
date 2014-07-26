@@ -13,7 +13,7 @@
                 :onchange => "updateIssueFrom('#{escape_javascript project_issue_form_path(@project, :id => @issue, :format => 'js')}')" %></p>
 <% end %>
 
-<% if @issue.safe_attribute? 'tracker_id' %>
+<% if @issue.safe_attribute? 'tracker_id' && !executor_editing(@issue, User.current) %>
 <p><%= f.select :tracker_id, available_trackers(User.current, @issue.project).collect {|t| [t.name, t.id]}, {:required => true},
                 :onchange => "updateIssueFrom('#{escape_javascript project_issue_form_path(@project, :id => @issue, :format => 'js')}')" %></p>
 <% end %>

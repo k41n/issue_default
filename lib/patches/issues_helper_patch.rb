@@ -7,20 +7,25 @@ module RedmineIssueDefaults
       def self.included(base) # :nodoc:
         base.send(:include, InstanceMethods)
 
-        # base.class_eval do
-        #   alias_method_chain :custom_fields_tabs, :contacts_tab
-        # end
       end
 
       module InstanceMethods
         def available_trackers(user, project)
-          if user.roles_for_project(project).map(&:name).include? "Исполнитель"
+          if is_executor?(user)
             return [Tracker.find_by_name('Возврат покупки')]
           end
           if user.roles_for_project(project).map(&:name).include? "Инициатор"
             return project.trackers - [Tracker.find_by_name('Возврат покупки')]
           end
           project.trackers
+        end
+
+        def executor_editing(issue, user)
+          is_executor?(user) && !issue.new_record?
+        end
+
+        def is_executor?(user)
+          user.roles_for_project(project).map(&:name).include? "Исполнитель"
         end
       end
 
