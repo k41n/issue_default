@@ -11,7 +11,7 @@ module RedmineIssueDefaults
 
       module InstanceMethods
         def available_trackers(project)
-          if is_executor?(user, project)
+          if is_executor?(project)
             return [Tracker.find_by_name('Возврат покупки')]
           end
           if user.roles_for_project(project).map(&:name).include? "Инициатор"
