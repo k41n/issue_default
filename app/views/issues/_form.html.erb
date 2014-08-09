@@ -14,8 +14,16 @@
 <% end %>
 
 <% if @issue.safe_attribute?('tracker_id') && !executor_editing?(@issue) %>
-<p><%= f.select :tracker_id, available_trackers(@project).collect {|t| [t.name, t.id]}, {:required => true},
-                :onchange => "updateIssueFrom('#{escape_javascript project_issue_form_path(@project, :id => @issue, :format => 'js')}')" %></p>
+<p>
+  <%= f.select :tracker_id, available_trackers(@project).collect {|t| [t.name, t.id]}, {:required => true},
+               :onchange => "updateIssueFrom('#{escape_javascript project_issue_form_path(@project, :id => @issue, :format => 'js')}')" %>
+  <%= f.select :corellation_act_type, options_for_select( [0,1].map{ |x| [t(:corellation_act_types)[x], x ] }, @issue.corellation_act_type) %>
+</p>
+<% value = @issue.editable_custom_field_values.find{ |x| x && x.custom_field.id == 13 } %>
+<% if value %>
+  <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
+<% end %>
+
 <% end %>
 <div style='display:none'>
 <% if @issue.safe_attribute? 'subject' %>
@@ -64,5 +72,37 @@ $(document).ready(function(){
   }
 
   setDefaultAssignee();
+
+  function setCorellationActThings() {
+    var icat = $('#issue_corellation_act_type');
+
+    tracker_id = $('#issue_tracker_id').val();
+    console.log('tracker_id = ' + tracker_id);
+    if (tracker_id == '4') {
+      icat.show();
+    }
+    else
+    {
+      icat.hide();
+    }
+  }
+
+  setCorellationActThings();
+
+  function setCorActType(){
+    var icat = $('#issue_corellation_act_type');
+    var val13 = $('#cf_13');
+    console.log('icat.val = ', icat.val());
+    if (icat.val() == '1') {
+      val13.show();
+    }    
+    else
+    {
+      val13.hide();
+    }
+  }  
+
+  setCorActType();
+  $('#issue_corellation_act_type').change(setCorActType);
 });
 <% end %>

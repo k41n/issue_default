@@ -6,3 +6,7 @@ ru:
   field_description: Комментарий
   button_escalate: Эскалация
   label_no_escalation_without_comment: 'Нельзя нажимать кнопку "Эскалация" не указав причину'
+  field_corellation_act_type: ''
+  corellation_act_types:
+    - Отправить свой
+    - Заказть у Банка
