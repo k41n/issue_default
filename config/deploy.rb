@@ -2,7 +2,7 @@
 lock '3.1.0'
 
 set :application, 'redmine_sber'
-set :deploy_to,     "/var/www/#{fetch(:application)}/plugins/issue_default"
+set :deploy_to,     "/var/www/#{fetch(:application)}/plugins/issue_defaults"
 set :repo_url, 'git@github.com:k41n/issue_default.git'
 set :rvm_ruby_string, '2.1.2@redmine-2.5'
 set :rvm_type, :system
@@ -43,7 +43,7 @@ set :db_pass, 'hul5OP6DaK6a'
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
-
+  
 namespace :deploy do
 
   desc <<-DESC
@@ -63,10 +63,10 @@ namespace :deploy do
   DESC
   task :restart do
     on roles(:app) do
-      prefix = "cd #{current_path}; rvm #{fetch(:rvm_ruby_string)} do eye "
-      execute "#{prefix} stop #{fetch(:application)}"
-      execute "#{prefix} unmonitor #{fetch(:application)}"
-      execute "#{prefix} quit"
+      prefix = "cd #{fetch(:deploy_to)}; rvm #{fetch(:rvm_ruby_string)} do eye "
+      execute "#{prefix} stop #{fetch(:application)}; echo 'Stopped anyway'"
+      execute "#{prefix} unmonitor #{fetch(:application)}; echo 'Unmonitored anyway'"
+      execute "#{prefix} quit; echo 'Quit anyway'"
       execute "#{prefix} load config/eye"
       execute "#{prefix} start #{fetch(:application)}"
     end
@@ -119,6 +119,22 @@ namespace :deploy do
     `rsync -rL #{user}@$CAPISTRANO:HOST$:#{release_path}/public/system public/`
   end
 
+  desc 'Bundle install'
+  task :bundle do
+    on roles(:app) do
+      prefix = "cd #{fetch(:deploy_to)}; rvm #{fetch(:rvm_ruby_string)} do "
+      execute "#{prefix} bundle install"
+    end
+  end
+  after :updated, :bundle
+
+  task :copy_eye_config do
+    on roles(:app) do
+      execute "cp #{fetch(:deploy_to)}/config/eye/sber.eye.#{fetch(:stage)} #{fetch(:deploy_to)}/config/eye/sber.eye"
+    end
+  end  
+  after :updated, :copy_eye_config
+
   after :publishing, :restart
 
   after :restart, :clear_cache do
@@ -130,4 +146,10 @@ namespace :deploy do
     end
   end
 
+  task :updating do
+    on roles(:app) do
+      prefix = "cd #{fetch(:deploy_to)};"
+      execute "#{prefix} git pull origin master"
+    end
+  end
 end
