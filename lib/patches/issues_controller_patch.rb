@@ -8,6 +8,8 @@ module RedmineIssueDefaults
         base.class_eval do
           skip_before_filter :authorize, only: :escalate
           alias_method_chain :index, :defaults
+          alias_method_chain :build_new_issue_from_params, :defaults
+          helper_method :available_trackers
 
         end
       end
@@ -45,6 +47,11 @@ module RedmineIssueDefaults
           index_without_defaults
         end
 
+        def build_new_issue_from_params_with_defaults
+          build_new_issue_from_params_without_defaults
+          @issue.tracker = available_trackers(@project).first
+        end
+
         def initiator?
           User.current.roles_for_project(@project).map(&:name).include?('Инициатор')
         end
@@ -52,6 +59,18 @@ module RedmineIssueDefaults
         def executor?
           User.current.roles_for_project(@project).map(&:name).include?('Исполнитель')
         end
+
+        def available_trackers(project)
+          if is_executor?(project)
+            return [Tracker.find_by_name('Возврат покупки')]
+          end
+          if user.roles_for_project(project).map(&:name).include? "Инициатор"
+            return project.trackers - [Tracker.find_by_name('Возврат покупки')]
+          end
+          project.trackers
+        end
+
+
       end
 
     end
