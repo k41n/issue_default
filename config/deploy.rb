@@ -139,7 +139,7 @@ namespace :deploy do
 
   task :db_migrate do
     on roles(:db) do
-        prefix = "cd #{fetch(:deploy_to)}/../..; RAILS_ENV=production rvm #{fetch(:rvm_ruby_string)} do bundle exec "
+        prefix = "cd #{fetch(:deploy_to)}/../..; RAILS_ENV=#{fetch(:stage)} rvm #{fetch(:rvm_ruby_string)} do bundle exec "
         execute "#{prefix} rake redmine:plugins:migrate NAME=issue_defaults"
 
     end
@@ -152,7 +152,7 @@ namespace :deploy do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
       within fetch(:deploy_to) do
-        prefix = "cd #{fetch(:deploy_to)}/../..; RAILS_ENV=production rvm #{fetch(:rvm_ruby_string)} do bundle exec "
+        prefix = "cd #{fetch(:deploy_to)}/../..; RAILS_ENV=#{fetch(:stage)} rvm #{fetch(:rvm_ruby_string)} do bundle exec "
         execute "#{prefix} rake tmp:clear"
       end
     end

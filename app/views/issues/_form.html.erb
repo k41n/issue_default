@@ -56,7 +56,11 @@ $(document).ready(function(){
   function setDefaultAssignee() {
     tracker_id = $('#issue_tracker_id').val();
     var trackerIdToAssigneeId = JSON.parse("<%= tracker_id_to_assignee_id.html_safe %>");
-    $('#issue_assigned_to_id').val(trackerIdToAssigneeId[tracker_id]);
+    assignedTo = $('#issue_assigned_to_id');
+    if (assignedTo.val() == '')
+    {
+      $('#issue_assigned_to_id').val(trackerIdToAssigneeId[tracker_id]);    
+    }
   }
 
   setDefaultAssignee();
