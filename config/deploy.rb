@@ -68,8 +68,9 @@ namespace :deploy do
       execute "#{prefix} unmonitor #{fetch(:application)}; echo 'Unmonitored anyway'"
       execute "#{prefix} quit; echo 'Quit anyway'"
       execute "#{prefix} load ../../config/eye"
-      execute "#{prefix} info"
       execute "#{prefix} start #{fetch(:application)}"
+      sleep 5
+      execute "#{prefix} info"
     end
   end
 
@@ -93,24 +94,23 @@ namespace :deploy do
 
   desc 'Loads database dump from staging'
   task :pull_db do
-    `rm -f sber.sql`
+    `rm -f pda.dump`
     prefix = "source ~#{user}/.rvm/scripts/rvm; cd #{current_path}; rvm #{rvm_ruby_string} do eye "
     run "#{prefix} stop #{application}"
 
-    run "mysqldump -u #{db_user} #{db_name} | bzip2 > /tmp/sber.sql.bz2"
-    get '/tmp/sber.sql.bz2', 'sber.sql.bz2'
-    `bunzip2 sber.sql.bz2`
+    run "pg_dump -O -x -Fc #{db_name} -Z9 > /tmp/pda.dump"
+    get '/tmp/pda.dump', 'pda.dump'
     File.open 'config/database.yml' do |file|
       yaml = YAML.load(file.read)
       dc = yaml['development']
       dc ||= yaml['production']
       `dropdb #{dc['database']}`
       `createdb #{dc['database']}`
-      `mysql -u #{dc['username']} #{dc['database']} < sber.sql`
-      `rm -f sber.sql`
+      `pg_restore -O -d #{dc['database']} pda.dump`
+      `rm -f pda.dump`
     end
 
-    prefix = "source ~#{fetch(:user)}/.rvm/scripts/rvm; cd #{current_path}; rvm #{rvm_ruby_string} do eye "
+    prefix = "source ~#{user}/.rvm/scripts/rvm; cd #{current_path}; rvm #{rvm_ruby_string} do eye "
     run "#{prefix} start #{application}"
 
   end
