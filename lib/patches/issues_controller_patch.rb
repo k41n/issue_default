@@ -46,11 +46,11 @@ module RedmineIssueDefaults
         end
 
         def initiator?
-          User.current.roles_for_project(@issue.project).map(&:name).include?('Инициатор')
+          User.current.roles_for_project(@project).map(&:name).include?('Инициатор')
         end
 
         def executor?
-          User.current.roles_for_project(@issue.project).map(&:name).include?('Исполнитель')
+          User.current.roles_for_project(@project).map(&:name).include?('Исполнитель')
         end
       end
 
