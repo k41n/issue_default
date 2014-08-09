@@ -68,6 +68,7 @@ namespace :deploy do
       execute "#{prefix} unmonitor #{fetch(:application)}; echo 'Unmonitored anyway'"
       execute "#{prefix} quit; echo 'Quit anyway'"
       execute "#{prefix} load config/eye"
+      execute "#{prefix} info"
       execute "#{prefix} start #{fetch(:application)}"
     end
   end
