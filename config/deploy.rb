@@ -67,7 +67,7 @@ namespace :deploy do
       execute "#{prefix} stop #{fetch(:application)}; echo 'Stopped anyway'"
       execute "#{prefix} unmonitor #{fetch(:application)}; echo 'Unmonitored anyway'"
       execute "#{prefix} quit; echo 'Quit anyway'"
-      execute "#{prefix} load config/eye"
+      execute "#{prefix} load ../../config/eye"
       execute "#{prefix} info"
       execute "#{prefix} start #{fetch(:application)}"
     end
@@ -131,7 +131,7 @@ namespace :deploy do
 
   task :copy_eye_config do
     on roles(:app) do
-      execute "cp #{fetch(:deploy_to)}/config/eye/sber.eye.#{fetch(:stage)} #{fetch(:deploy_to)}/config/eye/sber.eye"
+      execute "cp #{fetch(:deploy_to)}/../../config/eye/sber.eye.#{fetch(:stage)} #{fetch(:deploy_to)}/../../config/eye/sber.eye"
     end
   end  
   after :updated, :copy_eye_config
@@ -141,8 +141,9 @@ namespace :deploy do
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
-      within release_path do
-        execute :rake, 'cache:clear'
+      within fetch(:deploy_to) do
+        prefix = "cd #{fetch(:deploy_to)}/../..; RAILS_ENV=production rvm #{fetch(:rvm_ruby_string)} do bundle exec "
+        execute "#{prefix} rake tmp:clear"
       end
     end
   end
