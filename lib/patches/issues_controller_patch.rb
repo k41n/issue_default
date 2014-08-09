@@ -10,8 +10,6 @@ module RedmineIssueDefaults
           alias_method_chain :index, :defaults
 
         end
-
-        
       end
 
       module InstanceMethods
@@ -31,9 +29,9 @@ module RedmineIssueDefaults
         def index_with_defaults
           if params[:set_filter] != '1'
             params[:set_filter] = "1"
-            params[:f] = ["assigned_to_id", "author_id", ""]
-            params[:op] = {"assigned_to_id"=>"=", "author_id"=>"="}
-            params[:v] = {"assigned_to_id"=>["me"], "author_id"=>["me"]}            
+            params[:f] = ["assigned_to_id", ""]
+            params[:op] = {"assigned_to_id"=>"="}
+            params[:v] = {"assigned_to_id"=>["me"]}
           end
           index_without_defaults
         end
