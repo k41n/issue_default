@@ -63,11 +63,11 @@ namespace :deploy do
   DESC
   task :restart do
     on roles(:app) do
-      prefix = "cd #{fetch(:deploy_to)}; rvm #{fetch(:rvm_ruby_string)} do eye "
+      prefix = "cd #{fetch(:deploy_to)}/../..; rvm #{fetch(:rvm_ruby_string)} do eye "
       execute "#{prefix} stop #{fetch(:application)}; echo 'Stopped anyway'"
       execute "#{prefix} unmonitor #{fetch(:application)}; echo 'Unmonitored anyway'"
       execute "#{prefix} quit; echo 'Quit anyway'"
-      execute "#{prefix} load ../../config/eye"
+      execute "#{prefix} load config/eye"
       execute "#{prefix} start #{fetch(:application)}"
       sleep 5
       execute "#{prefix} info"
@@ -131,7 +131,7 @@ namespace :deploy do
 
   task :copy_eye_config do
     on roles(:app) do
-      execute "cp #{fetch(:deploy_to)}/../../config/eye/sber.eye.#{fetch(:stage)} #{fetch(:deploy_to)}/../../config/eye/sber.eye"
+      execute "cp #{fetch(:deploy_to)}/config/eye/sber.eye.#{fetch(:stage)} #{fetch(:deploy_to)}/../../config/eye/sber.eye"
     end
   end  
   after :updated, :copy_eye_config
