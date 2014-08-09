@@ -64,7 +64,10 @@ $(document).ready(function(){
         notes = $('#issue_notes');
         comment = notes.val();
         if (comment.length) {
-
+            f = $('form#issue-form');
+            t = f.attr('action');
+            f.attr('action', t + '/escalate');
+            f.submit();
         }
         else
         {
