@@ -31,6 +31,10 @@ module RedmineIssueDefaults
         def user
           @user ||= User.current
         end
+
+        def tracker_id_to_assignee_id
+          j(Hash[ProjectsTracker.where(project_id: @project.id).map{ |x| [x.tracker_id, x.default_assignee_id] }].to_json)
+        end
       end
 
     end

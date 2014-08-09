@@ -52,5 +52,13 @@ $(document).ready(function(){
   $("#issue_tracker_id, #issue_status_id").each(function(){
     $(this).val($(this).find("option[selected=selected]").val());
   });
+
+  function setDefaultAssignee() {
+    tracker_id = $('#issue_tracker_id').val();
+    var trackerIdToAssigneeId = JSON.parse("<%= tracker_id_to_assignee_id.html_safe %>");
+    $('#issue_assigned_to_id').val(trackerIdToAssigneeId[tracker_id]);
+  }
+
+  setDefaultAssignee();
 });
 <% end %>

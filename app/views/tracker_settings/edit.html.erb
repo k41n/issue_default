@@ -1,0 +1,15 @@
+<div class='box tabular'>
+  <h2>Назначен по умолчанию:</h2>
+  <%= form_tag update_tracker_settings_path(@project) do %>
+    <% @trackers.each do |tracker| %>
+      <% projects_tracker = ProjectsTracker.where(project_id: @project.id, tracker_id: tracker.id).first %>
+      <p>
+        <label><%= tracker.name %></label>
+        <%= select_tag "default_assignee[#{tracker.id}]", options_for_select( @assignable.map{ |x| [x.name, x.id] }, projects_tracker.default_assignee_id ) %>
+      </p>
+    <% end %>
+    <p>
+      <%= submit_tag "Сохранить" %>
+    </p>
+  <% end %>
+</div>
