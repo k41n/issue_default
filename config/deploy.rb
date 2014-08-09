@@ -10,9 +10,9 @@ set :user, 'root'
 set :use_sudo, false
 
 set :db_host, '127.0.0.1'
-set :db_name, 'pda_production'
-set :db_user, 'railrunner'
-set :db_pass, 'hul5OP6DaK6a'
+set :db_name, 'redmine'
+set :db_user, 'k41n'
+set :db_pass, ''
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
@@ -79,7 +79,7 @@ namespace :deploy do
   DESC
   task :stop do
     on roles(:app) do
-      prefix = "source ~#{fetch(:user)}/.rvm/scripts/rvm; cd #{current_path}; rvm #{fetch(:rvm_ruby_string)} do eye "
+      prefix = "cd #{fetch(:deploy_to)}/../..; rvm #{fetch(:rvm_ruby_string)} do eye "
       run "#{prefix} stop #{application}"
       run "#{prefix} quit"
     end
@@ -87,32 +87,32 @@ namespace :deploy do
 
   task :info do
     on roles(:app) do
-      prefix = "source ~#{fetch(:user)}/.rvm/scripts/rvm; cd #{current_path}; rvm #{fetch(:rvm_ruby_string)} do eye "
+      prefix = "cd #{fetch(:deploy_to)}/../..; rvm #{fetch(:rvm_ruby_string)} do eye "
       run "#{prefix} info #{application}"
     end
   end
 
   desc 'Loads database dump from staging'
   task :pull_db do
-    `rm -f pda.dump`
-    prefix = "source ~#{user}/.rvm/scripts/rvm; cd #{current_path}; rvm #{rvm_ruby_string} do eye "
-    run "#{prefix} stop #{application}"
+    on roles(:db) do
+      `rm -f sber.dump`
+      prefix = "cd #{fetch(:deploy_to)}/../..; rvm #{fetch(:rvm_ruby_string)} do eye "
+      execute "#{prefix} stop #{fetch(:application)}"
 
-    run "pg_dump -O -x -Fc #{db_name} -Z9 > /tmp/pda.dump"
-    get '/tmp/pda.dump', 'pda.dump'
-    File.open 'config/database.yml' do |file|
-      yaml = YAML.load(file.read)
-      dc = yaml['development']
-      dc ||= yaml['production']
-      `dropdb #{dc['database']}`
-      `createdb #{dc['database']}`
-      `pg_restore -O -d #{dc['database']} pda.dump`
-      `rm -f pda.dump`
+      execute "pg_dump -O -x -Fc -U #{fetch(:db_user)} #{fetch(:db_name)} -Z9 > /tmp/sber.dump"
+      download! '/tmp/sber.dump', 'sber.dump'
+      File.open '../../config/database.yml' do |file|
+        yaml = YAML.load(file.read)
+        dc = yaml['development']
+        dc ||= yaml['production']
+        `dropdb #{dc['database']}`
+        `createdb #{dc['database']}`
+        `pg_restore -O -d #{dc['database']} sber.dump`
+        `rm -f sber.dump`
+      end
+
+      execute "#{prefix} start #{fetch(:application)}"
     end
-
-    prefix = "source ~#{user}/.rvm/scripts/rvm; cd #{current_path}; rvm #{rvm_ruby_string} do eye "
-    run "#{prefix} start #{application}"
-
   end
 
   desc 'Synchronize images to staging'
@@ -134,7 +134,17 @@ namespace :deploy do
       execute "cp #{fetch(:deploy_to)}/config/eye/sber.eye.#{fetch(:stage)} #{fetch(:deploy_to)}/../../config/eye/sber.eye"
     end
   end  
+  
   after :updated, :copy_eye_config
+
+  task :db_migrate do
+    on roles(:db) do
+        prefix = "cd #{fetch(:deploy_to)}/../..; RAILS_ENV=production rvm #{fetch(:rvm_ruby_string)} do bundle exec "
+        execute "#{prefix} rake redmine:plugins:migrate NAME=issue_defaults"
+
+    end
+  end
+  after :updated, :db_migrate
 
   after :publishing, :restart
 
