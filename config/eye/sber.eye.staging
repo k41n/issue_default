@@ -17,7 +17,7 @@ Eye.application :redmine_sber do
     pid_file "puma.pid"
     stdall "#{RAILS_ROOT}/log/puma.log"
 
-    start_command "#{BUNDLE} exec puma -d -t 0:5 -w 5 -b unix://#{RAILS_ROOT}/tmp/sockets/puma.sock --environment #{RAILS_ENV} #{RAILS_ROOT}/config.ru"
+    start_command "#{BUNDLE} exec puma -d -t 0:2 -b unix://#{RAILS_ROOT}/tmp/sockets/puma.sock --environment #{RAILS_ENV} #{RAILS_ROOT}/config.ru"
     stop_signals [:TERM, 5.seconds, :KILL]
     restart_command "kill -USR2 {{PID}}"
 
