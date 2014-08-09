@@ -10,16 +10,6 @@ module RedmineIssueDefaults
       end
 
       module InstanceMethods
-        def available_trackers(project)
-          if is_executor?(project)
-            return [Tracker.find_by_name('Возврат покупки')]
-          end
-          if user.roles_for_project(project).map(&:name).include? "Инициатор"
-            return project.trackers - [Tracker.find_by_name('Возврат покупки')]
-          end
-          project.trackers
-        end
-
         def executor_editing?(issue)
           is_executor?(issue.project) && !issue.new_record?
         end

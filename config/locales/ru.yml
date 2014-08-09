@@ -10,3 +10,4 @@ ru:
   corellation_act_types:
     - Отправить свой
     - Заказть у Банка
+  general_csv_encoding: CP1251
