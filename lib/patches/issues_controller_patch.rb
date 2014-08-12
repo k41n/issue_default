@@ -49,7 +49,7 @@ module RedmineIssueDefaults
 
         def build_new_issue_from_params_with_defaults
           build_new_issue_from_params_without_defaults
-          @issue.tracker = available_trackers(@project).first if @issue.new_record?
+          @issue.tracker = available_trackers(@project).first if @issue.new_record? && action_name == 'new'
         end
 
         def initiator?
