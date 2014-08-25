@@ -19,7 +19,6 @@ module RedmineIssueDefaults
           find_issue
           update
           head 403 && return unless User.current.roles_for_project(@issue.project).map(&:name).include?('Инициатор')
-          Rails.logger.info "-------- ESCALATION !!! ------------"
           User.find_each do |user|
             if user.roles_for_project(@issue.project).map(&:name).include?('Эскалатор')
               Watcher.create(:watchable => @issue, :user_id => user.id)
@@ -62,10 +61,10 @@ module RedmineIssueDefaults
 
         def available_trackers(project)
           if is_executor?(project)
-            return [Tracker.find_by_name('Возврат покупки')]
+            return [Tracker.find_by_name('Возврат покупки'), Tracker.find_by_name('Претензионка')]
           end
           if user.roles_for_project(project).map(&:name).include? "Инициатор"
-            return project.trackers - [Tracker.find_by_name('Возврат покупки')]
+            return project.trackers - [Tracker.find_by_name('Возврат покупки')] - [Tracker.find_by_name('Претензионка')]
           end
           project.trackers
         end
