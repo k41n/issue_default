@@ -27,6 +27,10 @@
 <% if value %>
   <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
 <% end %>
+<% value = @issue.editable_custom_field_values.find{ |x| x && x.custom_field.id == 31 } %>
+<% if value %>
+  <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
+<% end %>
 
 <% end %>
 <div style='display:none'>
@@ -97,6 +101,7 @@ $(document).ready(function(){
     var icat = $('#issue_corellation_act_type');
     var val13 = $('#cf_13');
     var val33 = $('#cf_33');
+    var val31 = $('#cf_31');
     if (icat.val() == '1') {
       val13.show();
       val33.hide();
@@ -106,9 +111,21 @@ $(document).ready(function(){
       val13.hide();
       val33.show();
     }
+    visibleVals = $('select.list_cf:visible');
+    if ( visibleVals.length && (visibleVals.val() == 'Остаток задолженности на конкретную дату') )
+    {
+      val31.show();
+    }
+    else
+    {
+      val31.hide();
+    }
   }
 
   setCorActType();
   $('#issue_corellation_act_type').change(setCorActType);
+  $('select.list_cf').change(setCorActType);
+
+
 });
 <% end %>
