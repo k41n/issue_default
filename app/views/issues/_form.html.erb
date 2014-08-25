@@ -19,17 +19,11 @@
                :onchange => "updateIssueFrom('#{escape_javascript project_issue_form_path(@project, :id => @issue, :format => 'js')}')" %>
   <%= f.select :corellation_act_type, options_for_select( [0,1].map{ |x| [t(:corellation_act_types)[x], x ] }, @issue.corellation_act_type) %>
 </p>
-<% value = @issue.editable_custom_field_values.find{ |x| x && x.custom_field.id == 13 } %>
-<% if value %>
-  <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
-<% end %>
-<% value = @issue.editable_custom_field_values.find{ |x| x && x.custom_field.id == 33 } %>
-<% if value %>
-  <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
-<% end %>
-<% value = @issue.editable_custom_field_values.find{ |x| x && x.custom_field.id == 31 } %>
-<% if value %>
-  <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
+<% [13, 31, 32, 33].each do |cf_id| %>
+  <% value = @issue.editable_custom_field_values.find{ |x| x && x.custom_field.id == cf_id } %>
+  <% if value %>
+    <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
+  <% end %>
 <% end %>
 
 <% end %>
@@ -100,10 +94,14 @@ $(document).ready(function(){
   function setCorActType(){
     var icat = $('#issue_corellation_act_type');
     var val13 = $('#cf_13');
-    var val33 = $('#cf_33');
-    var val31 = $('#cf_31');
     var val14 = $('#cf_14');
     var val15 = $('#cf_15');
+    var val31 = $('#cf_31');
+    var val32 = $('#cf_32');
+    var val33 = $('#cf_33');
+
+    val32.show();
+
     if (icat.val() == '1') {
       val13.show();
       val33.hide();
