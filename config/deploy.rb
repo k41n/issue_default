@@ -51,10 +51,10 @@ namespace :deploy do
   DESC
   task :start do
     on roles(:app) do
-      prefix = "source ~#{user}/.rvm/scripts/rvm; cd #{current_path}; rvm #{rvm_ruby_string} do eye "
-      run "#{prefix} quit"
-      run "#{prefix} load config/eye"
-      run "#{prefix} start #{application}"
+      prefix = "cd #{fetch(:deploy_to)}/../..; rvm #{fetch(:rvm_ruby_string)} do eye "
+      execute "#{prefix} quit"
+      execute "#{prefix} load config/eye"
+      execute "#{prefix} start #{fetch(:application)}"
     end
   end
 
@@ -80,15 +80,15 @@ namespace :deploy do
   task :stop do
     on roles(:app) do
       prefix = "cd #{fetch(:deploy_to)}/../..; rvm #{fetch(:rvm_ruby_string)} do eye "
-      run "#{prefix} stop #{application}"
-      run "#{prefix} quit"
+      execute "#{prefix} stop #{fetch(:application)}"
+      execute "#{prefix} quit"
     end
   end
 
   task :info do
     on roles(:app) do
       prefix = "cd #{fetch(:deploy_to)}/../..; rvm #{fetch(:rvm_ruby_string)} do eye "
-      run "#{prefix} info #{application}"
+      execute "#{prefix} info #{fetch(:application)}"
     end
   end
 

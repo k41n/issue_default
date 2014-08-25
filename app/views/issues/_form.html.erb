@@ -23,6 +23,10 @@
 <% if value %>
   <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
 <% end %>
+<% value = @issue.editable_custom_field_values.find{ |x| x && x.custom_field.id == 33 } %>
+<% if value %>
+  <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
+<% end %>
 
 <% end %>
 <div style='display:none'>
@@ -67,7 +71,7 @@ $(document).ready(function(){
     assignedTo = $('#issue_assigned_to_id');
     if (assignedTo.val() == '')
     {
-      $('#issue_assigned_to_id').val(trackerIdToAssigneeId[tracker_id]);    
+      $('#issue_assigned_to_id').val(trackerIdToAssigneeId[tracker_id]);
     }
   }
 
@@ -92,15 +96,17 @@ $(document).ready(function(){
   function setCorActType(){
     var icat = $('#issue_corellation_act_type');
     var val13 = $('#cf_13');
-    console.log('icat.val = ', icat.val());
+    var val33 = $('#cf_33');
     if (icat.val() == '1') {
       val13.show();
-    }    
+      val33.hide();
+    }
     else
     {
       val13.hide();
+      val33.show();
     }
-  }  
+  }
 
   setCorActType();
   $('#issue_corellation_act_type').change(setCorActType);

@@ -37,8 +37,6 @@ module RedmineIssueDefaults
             s << "</tr>\n"
             s.html_safe
           end
-          
-          
         end
 
       end
@@ -58,7 +56,7 @@ module RedmineIssueDefaults
 
         def tracker_id_to_assignee_id
           j(Hash[ProjectsTracker.where(project_id: @project.id).map{ |x| [x.tracker_id, x.default_assignee_id] }].to_json)
-        end        
+        end
       end
 
     end
