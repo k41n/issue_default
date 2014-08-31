@@ -1,7 +1,7 @@
 BUNDLE = 'bundle'
 RAILS_ENV = 'staging'
 ROOT = File.expand_path(File.join(File.dirname(__FILE__), %w[ processes ]))
-RAILS_ROOT = File.expand_path(File.dirname(__FILE__) + "../../..")
+RAILS_ROOT = '/var/www/redmine_sber'
 
 Eye.config do
   logger "#{ROOT}/eye.log"

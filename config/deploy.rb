@@ -12,7 +12,7 @@ set :use_sudo, false
 set :db_host, '127.0.0.1'
 set :db_name, 'redmine'
 set :db_user, 'k41n'
-set :db_pass, ''
+set :db_pass, ENV['DB_PASS']
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
