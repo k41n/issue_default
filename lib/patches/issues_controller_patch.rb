@@ -48,11 +48,15 @@ module RedmineIssueDefaults
 
         def build_new_issue_from_params_with_defaults
           build_new_issue_from_params_without_defaults
-          @issue.tracker = available_trackers(@project).first if @issue.new_record? && action_name == 'new'
+          @issue.tracker = first_or_cancellation(available_trackers(@project)) if @issue.new_record? && action_name == 'new'
         end
 
         def initiator?
           User.current.roles_for_project(@project).map(&:name).include?('Инициатор')
+        end
+
+        def first_or_cancellation(array_of_trackers)
+          array_of_trackers.find{ |x| x.name == 'Отмена операции'} || array_of_trackers.first
         end
 
         def executor?
@@ -64,7 +68,7 @@ module RedmineIssueDefaults
             return [Tracker.find_by_name('Возврат покупки'), Tracker.find_by_name('Претензионка')]
           end
           if user.roles_for_project(project).map(&:name).include? "Инициатор"
-            return project.trackers - [Tracker.find_by_name('Возврат покупки')] - [Tracker.find_by_name('Претензионка')]
+            return ( project.trackers - [Tracker.find_by_name('Возврат покупки')] - [Tracker.find_by_name('Претензионка')] ).sort
           end
           project.trackers
         end
