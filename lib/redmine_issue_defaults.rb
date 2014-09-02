@@ -5,3 +5,4 @@ ActionDispatch::Reloader.to_prepare do
 end
 
 require 'hooks/view_layouts_hook'
+require 'hooks/issues_controller_hooks'

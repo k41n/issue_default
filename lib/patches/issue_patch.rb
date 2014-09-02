@@ -9,11 +9,18 @@ module RedmineIssueDefaults
           safe_attributes :corellation_act_type
 
           alias_method_chain :create_journal, :sber
+
+          validate :check_attachment_error, on: :create
+          attr_accessor :attachment_error
         end
       end
     end
 
     module InstanceMethods
+      def check_attachment_error
+        errors[:base] << @attachment_error if @attachment_error
+      end
+
       def create_journal_with_sber
         if @current_journal
           # attributes changes
