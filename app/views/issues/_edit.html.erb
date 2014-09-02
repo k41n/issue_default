@@ -49,7 +49,7 @@
     <%= hidden_field_tag 'last_journal_id', params[:last_journal_id] || @issue.last_journal_id %>
     <%= submit_tag l(:button_submit) %>
     <% if User.current.roles_for_project(@issue.project).map(&:name).include?('Инициатор') %>
-      <%= button_tag l(:button_escalate), id: 'escalate' %>
+      <%= button_tag l(:button_escalate), id: 'escalate', style: 'float: right' %>
     <% end %>
     <%= preview_link preview_edit_issue_path(:project_id => @project, :id => @issue), 'issue-form' %>
 <% end %>
@@ -71,9 +71,8 @@ $(document).ready(function(){
         }
         else
         {
-          console.log('Error - no comment!');
           notes.addClass('erroneous');
-          notes.parent().parent().find('.error-message').show();          
+          notes.parent().parent().find('.error-message').show();
         }
 
     });
