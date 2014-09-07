@@ -33,6 +33,13 @@
   <a style='display: inline-block; width: 300px' href='/plugin_assets/issue_defaults/Шаблон_для_заявки_на_розыск_платежа_по_транзакции.xlsx'>Шаблон для заявки на розыск платежа по транзакции</a>
 </div>
 <div
+  class='examples_sum_search'
+  style='width: 500px; position: absolute; right: 0px; margin-top: -30px'
+>
+  <strong style='display: inline-block; vertical-align: top; text-align: left; margin-right: 50px '>Пример:</strong>
+  <a style='display: inline-block; width: 300px' href='/plugin_assets/issue_defaults/Шаблон_заявки_на_розыск_платежа_по_неопознанной_сумме.xlsx'>Шаблон для заявки на розыск платежа по неопознанной сумме</a>
+</div>
+<div
   class='examples_act'
   style='width: 500px; position: absolute; right: 0px; margin-top: -30px'
 >
@@ -177,6 +184,14 @@ $(document).ready(function(){
     else
     {
       $('.examples_cancellation').hide()
+    }
+    if ((issueTrackerId == 5) && (subtype == 'Розыск неопознанной суммы'))
+    {
+      $('.examples_sum_search').show()
+    }
+    else
+    {
+      $('.examples_sum_search').hide()
     }
   }
 
