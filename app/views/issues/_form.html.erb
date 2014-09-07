@@ -25,7 +25,13 @@
     <p style='display: none' id="cf_<%= value.custom_field.id %>"><%= custom_field_tag_with_label :issue, value, :required => @issue.required_attribute?(value.custom_field_id) %></p>
   <% end %>
 <% end %>
-
+<div
+  class='examples_transaction_search'
+  style='width: 500px; position: absolute; right: 0px; margin-top: -30px'
+>
+  <strong style='display: inline-block; vertical-align: top; text-align: left; margin-right: 50px '>Пример:</strong>
+  <a style='display: inline-block; width: 300px' href='/plugin_assets/issue_defaults/Шаблон_для_заявки_на_розыск_платежа_по_транзакции.xlsx'>Шаблон для заявки на розыск платежа по транзакции</a>
+</div>
 <% end %>
 <div style='display:none'>
 <% if @issue.safe_attribute? 'subject' %>
@@ -79,7 +85,6 @@ $(document).ready(function(){
     var icat = $('#issue_corellation_act_type');
 
     tracker_id = $('#issue_tracker_id').val();
-    console.log('tracker_id = ' + tracker_id);
     if (tracker_id == '4') {
       icat.show();
     }
@@ -126,11 +131,23 @@ $(document).ready(function(){
       val14.show();
       val15.show();
     }
+
+    issueTrackerId = $('#issue_tracker_id').val()
+    subtype = visibleVals.val()
+    if ((issueTrackerId == 5) && (subtype == 'Розыск по транзакции'))
+    {
+      $('.examples_transaction_search').show()
+    }
+    else
+    {
+      $('.examples_transaction_search').hide()
+    }
   }
 
   setCorActType();
   $('#issue_corellation_act_type').change(setCorActType);
   $('select.list_cf').change(setCorActType);
+
 
 
 });
