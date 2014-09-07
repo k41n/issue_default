@@ -32,6 +32,17 @@
   <strong style='display: inline-block; vertical-align: top; text-align: left; margin-right: 50px '>Пример:</strong>
   <a style='display: inline-block; width: 300px' href='/plugin_assets/issue_defaults/Шаблон_для_заявки_на_розыск_платежа_по_транзакции.xlsx'>Шаблон для заявки на розыск платежа по транзакции</a>
 </div>
+<div
+  class='examples_act'
+  style='width: 500px; position: absolute; right: 0px; margin-top: -30px'
+>
+  <strong style='display: inline-block; vertical-align: top; text-align: left; margin-right: 50px '>Пример:</strong>
+  <div style='display: inline-block; width: 300px'>
+
+    <a href='/plugin_assets/issue_defaults/Акт_сверки_на_конкретную_дату.docx'>Акт сверки на конкретную дату</a><br/>
+    <a href='/plugin_assets/issue_defaults/Акт_сверки_по_обороту_и_комиссии_за_период.docx'>Акт по обороту и комиссии за период</a>
+  </div>
+</div>
 <% end %>
 <div style='display:none'>
 <% if @issue.safe_attribute? 'subject' %>
@@ -141,6 +152,14 @@ $(document).ready(function(){
     else
     {
       $('.examples_transaction_search').hide()
+    }
+    if (issueTrackerId == 4)
+    {
+      $('.examples_act').show()
+    }
+    else
+    {
+      $('.examples_act').hide()
     }
   }
 
