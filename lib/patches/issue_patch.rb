@@ -12,6 +12,7 @@ module RedmineIssueDefaults
 
           validate :check_attachment_error, on: :create
           attr_accessor :attachment_error
+          before_save :record_execution_date
         end
       end
     end
@@ -19,6 +20,12 @@ module RedmineIssueDefaults
     module InstanceMethods
       def check_attachment_error
         errors[:base] << @attachment_error if @attachment_error
+      end
+
+      def record_execution_date
+        if status_id_changed? && status.name == 'Исполнение подтверждено'
+          self.executed_on = Time.zone.now
+        end
       end
 
       def create_journal_with_sber

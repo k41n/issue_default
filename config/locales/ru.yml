@@ -11,3 +11,4 @@ ru:
     - Отправить свой
     - Заказть у Банка
   general_csv_encoding: CP1251
+  field_created_on: Дата создания
