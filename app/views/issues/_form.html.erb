@@ -43,6 +43,15 @@
     <a href='/plugin_assets/issue_defaults/Акт_сверки_по_обороту_и_комиссии_за_период.docx'>Акт по обороту и комиссии за период</a>
   </div>
 </div>
+<div
+  class='examples_cancellation'
+  style='width: 500px; position: absolute; right: 0px; margin-top: -30px'
+>
+  <strong style='display: inline-block; vertical-align: top; text-align: left; margin-right: 50px '>Пример:</strong>
+  <div style='display: inline-block; width: 300px'>
+    <a href='/plugin_assets/issue_defaults/Шаблон_для_заявки_на_отмену_операции.xlsx'>Шаблон заявки на отмену операции</a>
+  </div>
+</div>
 <% end %>
 <div style='display:none'>
 <% if @issue.safe_attribute? 'subject' %>
@@ -160,6 +169,14 @@ $(document).ready(function(){
     else
     {
       $('.examples_act').hide()
+    }
+    if (issueTrackerId == 3)
+    {
+      $('.examples_cancellation').show()
+    }
+    else
+    {
+      $('.examples_cancellation').hide()
     }
   }
 
