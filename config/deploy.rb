@@ -99,7 +99,7 @@ namespace :deploy do
       prefix = "cd #{fetch(:deploy_to)}/../..; rvm #{fetch(:rvm_ruby_string)} do eye "
       execute "#{prefix} stop #{fetch(:application)}"
 
-      execute "pg_dump -O -x -Fc -U #{fetch(:db_user)} #{fetch(:db_name)} -Z9 > /tmp/sber.dump"
+      execute "PGPASSWORD=\"#{fetch(:db_pass)}\" pg_dump -O -x -Fc -U #{fetch(:db_user)} #{fetch(:db_name)} -Z9 > /tmp/sber.dump"
       download! '/tmp/sber.dump', 'sber.dump'
       File.open '../../config/database.yml' do |file|
         yaml = YAML.load(file.read)
