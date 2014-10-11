@@ -43,7 +43,7 @@ set :db_pass, ENV['DB_PASS']
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
-  
+
 namespace :deploy do
 
   desc <<-DESC
@@ -133,8 +133,8 @@ namespace :deploy do
     on roles(:app) do
       execute "cp #{fetch(:deploy_to)}/config/eye/sber.eye.#{fetch(:stage)} #{fetch(:deploy_to)}/../../config/eye/sber.eye"
     end
-  end  
-  
+  end
+
   after :updated, :copy_eye_config
 
   task :db_migrate do

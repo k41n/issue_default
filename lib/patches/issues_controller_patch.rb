@@ -29,12 +29,12 @@ module RedmineIssueDefaults
 
         def index_with_defaults
           if params[:set_filter] != '1'
-            if initiator?
-              params[:set_filter] = "1"
-              params[:f] = ["author_id", ""]
-              params[:op] = {"author_id"=>"="}
-              params[:v] = {"author_id"=>["me"]}
-            end
+            # if initiator?
+            #   params[:set_filter] = "1"
+            #   params[:f] = ["author_id", ""]
+            #   params[:op] = {"author_id"=>"="}
+            #   params[:v] = {"author_id"=>["me"]}
+            # end
 
             if executor?
               params[:set_filter] = "1"
