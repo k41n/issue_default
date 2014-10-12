@@ -59,6 +59,15 @@
     <a href='/plugin_assets/issue_defaults/Шаблон_для_заявки_на_отмену_операции.xlsx'>Шаблон заявки на отмену операции</a>
   </div>
 </div>
+<div
+  class='examples_processing'
+  style='width: 500px; position: absolute; right: 0px; margin-top: -30px'
+>
+  <strong style='display: inline-block; vertical-align: top; text-align: left; margin-right: 50px '>Пример:</strong>
+  <div style='display: inline-block; width: 300px'>
+    <a href='/plugin_assets/issue_defaults/Шаблон_для_заявки_на_процессирование_операций.xlsx'>Шаблон заявки на процессирование операций</a>
+  </div>
+</div>
 <% end %>
 <div style='display:none'>
 <% if @issue.safe_attribute? 'subject' %>
@@ -184,6 +193,14 @@ $(document).ready(function(){
     else
     {
       $('.examples_cancellation').hide()
+    }
+    if (issueTrackerId == 9)
+    {
+      $('.examples_processing').show()
+    }
+    else
+    {
+      $('.examples_processing').hide()
     }
     if ((issueTrackerId == 5) && (subtype == 'Розыск неопознанной суммы'))
     {

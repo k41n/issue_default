@@ -4,7 +4,7 @@ module RedmineIssueDefaults
       def controller_issues_new_before_save(context = {})
         issue = context[:issue]
         params = context[:params]
-        if ['Отмена операции', 'Акты сверки'].include?(issue.tracker.name) && params[:attachments].blank?
+        if ['Отмена операции', 'Акты сверки', 'Процессирование операции'].include?(issue.tracker.name) && params[:attachments].blank?
           unless issue.tracker.name == 'Акты сверки' && params[:issue][:corellation_act_type] == '1'
             issue.attachment_error = 'Так дело не пойдет, надо приложить файл'
           end
