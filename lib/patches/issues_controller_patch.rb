@@ -24,18 +24,10 @@ module RedmineIssueDefaults
               Watcher.create(:watchable => @issue, :user_id => user.id)
             end
           end
-          # redirect_to issue_path(@issue)
         end
 
         def index_with_defaults
           if params[:set_filter] != '1'
-            # if initiator?
-            #   params[:set_filter] = "1"
-            #   params[:f] = ["author_id", ""]
-            #   params[:op] = {"author_id"=>"="}
-            #   params[:v] = {"author_id"=>["me"]}
-            # end
-
             if executor?
               params[:set_filter] = "1"
               params[:f] = ["assigned_to_id", ""]

@@ -13,11 +13,18 @@ module RedmineIssueDefaults
           validate :check_attachment_error, on: :create
           attr_accessor :attachment_error
           before_save :record_execution_date
+
+          alias_method_chain :required_attribute?, :sber
         end
       end
     end
 
     module InstanceMethods
+      def required_attribute_with_sber?(name)
+        return true if tracker && tracker.name=='Возврат покупки' && name == 'assigned_to_id'
+        required_attribute_without_sber?(name)
+      end
+
       def check_attachment_error
         errors[:base] << @attachment_error if @attachment_error
       end

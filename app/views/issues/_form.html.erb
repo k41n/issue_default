@@ -199,7 +199,34 @@ $(document).ready(function(){
   $('#issue_corellation_act_type').change(setCorActType);
   $('select.list_cf').change(setCorActType);
 
+  function modifyAssignedToId()
+  {
+    issueTrackerId = $('#issue_tracker_id').val();
+    console.log('issueTrackerId = ', issueTrackerId);
+    if (issueTrackerId == '1') {
+      // Remove empty option
+      $('#issue_assigned_to_id option[value=]').hide()
+      $('#issue_assigned_to_id option').not('[data-initiator=true]').hide()
+      $('#issue_assigned_to_id').val($('#issue_assigned_to_id option:not([style])').attr('value'));
+    }
+    else {
+      $('#issue_assigned_to_id option[value=]').show()
+      $('label[for=issue_assigned_to_id] span').remove()
+      $('#issue_assigned_to_id option').not('[data-initiator=true]').show()
+    }
+  }
 
+  function addInitiatorDataToOptions()
+  {
+    for (i = 0; i < initiatorUserIds.length; i++ )
+    {
+      initiatorUserId = initiatorUserIds[i];
+      $('#issue_assigned_to_id option[value=' + initiatorUserId + ']').attr('data-initiator', true);
+    }
+  }
+  $('#issue_tracker_id').change(modifyAssignedToId)
+  addInitiatorDataToOptions()
+  modifyAssignedToId()
 
 });
 <% end %>

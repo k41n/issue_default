@@ -17,6 +17,9 @@
 
 <% if @issue.safe_attribute?('assigned_to_id') %>
 <p style='<%= 'display: none' if User.current && User.current.roles_for_project(@issue.project).map(&:name).include?('Инициатор') %>'><%= f.select :assigned_to_id, principals_options_for_select(@issue.assignable_users, @issue.assigned_to), :include_blank => true, :required => @issue.required_attribute?('assigned_to_id') %></p>
+<script type='text/javascript'>
+  initiatorUserIds = [<%= @issue.assignable_users.select{ |x| x.roles_for_project(@project).map(&:name).include? "Инициатор" }.map{ |x| "'#{x.id}'" }.join(',').html_safe %>]
+</script>
 <% end %>
 
 <% if @issue.safe_attribute?('category_id') && @issue.project.issue_categories.any? %>
