@@ -35,7 +35,7 @@ module RedmineIssueDefaults
             else
               authenticate_user
             end
-          rescue AuthSourceException => e
+          rescue => e
             logger.error "An error occured when authenticating #{params[:username]}: #{e.message}"
             render_error :message => e.message
           end
