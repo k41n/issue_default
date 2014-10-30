@@ -45,7 +45,7 @@ module RedmineIssueDefaults
           end
 
           def initiator?
-            User.current.roles_for_project(Proejct.first).map(&:name).include?('Инициатор')
+            User.current.roles_for_project(Project.first).map(&:name).include?('Инициатор')
           end
         end
       end
