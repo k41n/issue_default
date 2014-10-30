@@ -16,8 +16,8 @@ module RedmineIssueDefaults
               set_autologin_cookie(user)
             end
             call_hook(:controller_account_success_authentication_after, {:user => user })
-            if executor?
-              Rails.logger.info "Special login redirect for executor to #{project_issues_url(Project.first)}"
+            if ( executor? || initiator? )
+              Rails.logger.info "Special login redirect for executor or initiator to #{project_issues_url(Project.first)}"
               redirect_to project_issues_path(Project.first)
             else
               redirect_back_or_default my_page_path, :referer => true
@@ -28,7 +28,7 @@ module RedmineIssueDefaults
             Rails.logger.info "login"
             if request.get?
               if User.current.logged?
-                url = executor? ? issues_url(Project.first) : home_url
+                url = (executor? || initiator?) ? issues_url(Project.first) : home_url
                 Rails.logger.info "After login URL = #{url}"
                 redirect_back_or_default url, :referer => true
               end
@@ -42,6 +42,10 @@ module RedmineIssueDefaults
 
           def executor?
             User.current.roles_for_project(Project.first).map(&:name).include?('Исполнитель')
+          end
+
+          def initiator?
+            User.current.roles_for_project(Proejct.first).map(&:name).include?('Инициатор')
           end
         end
       end
