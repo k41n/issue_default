@@ -14,5 +14,19 @@ module RedmineIssueDefaults
         end
       end
     end
+
+    class ControllerIssuesEditBeforeSaveHook < Redmine::Hook::ViewListener
+      def controller_issues_edit_before_save(context = {})
+        issue = context[:issue]
+        params = context[:params]
+        if ['Акты сверки', 'Розыск платежа', 'Отмена операции', 'Процессирование операции'].include?(issue.tracker.name) &&
+          params[:attachments].blank? &&
+          params[:issue][:notes].blank? &&
+          issue.status.name == 'Ответ подготовлен'
+
+          issue.attachment_error = 'Нужно оставить комментарий или приложить файл'
+        end
+      end
+    end
   end
 end

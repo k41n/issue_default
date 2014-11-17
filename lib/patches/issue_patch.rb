@@ -10,11 +10,12 @@ module RedmineIssueDefaults
 
           alias_method_chain :create_journal, :sber
 
-          validate :check_attachment_error, on: :create
+          validate :check_attachment_error
           attr_accessor :attachment_error
           before_save :record_execution_date
 
           alias_method_chain :required_attribute?, :sber
+
         end
       end
     end
