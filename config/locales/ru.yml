@@ -12,4 +12,4 @@ ru:
     - Заказть у Банка
   general_csv_encoding: CP1251
   field_created_on: Дата создания
-  label_sber_executed_on: Дата создания
+  field_executed_on: Дата исполнения
