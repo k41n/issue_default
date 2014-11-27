@@ -7,7 +7,7 @@ module RedmineIssueDefaults
         base.class_eval do
           alias_method_chain :initialize_available_filters, :sber
 
-          self.available_columns << QueryColumn.new(:executed_on, :sortable => "#{Issue.table_name}.executed_on", :caption => 'Дата выполнения')
+          self.available_columns << QueryColumn.new(:executed_on, :sortable => "#{Issue.table_name}.executed_on")
         end
       end
     end
